@@ -37,11 +37,10 @@ const MainHeader = () => {
     dispatch(addToDashboard({ exercises, currentTime }));
     dispatch(clearExercise());
     nav('/dashboard');
-
   };
 
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-5 flex-wrap">
       <h2 className="font-bold text-4xl text-[#340075] mr-10">Workout</h2>
       <button
         className="text-[#f69ca5] bg-[#ffdde1] px-5 py-2 rounded-md disabled:opacity-75"

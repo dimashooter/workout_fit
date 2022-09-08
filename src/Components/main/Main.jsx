@@ -7,7 +7,7 @@ import MainHeader from './MainHeader';
 
 const Main = () => {
   return (
-    <div className="w-[50%] bg-[#f3f3f3] min-h-[100vh] pl-[50px] py-8 pr-8 ">
+    <div className="lg:w-[50%] sm:w-[100%] bg-[#f3f3f3] min-h-[100vh] pl-[50px] py-8 pr-8 ">
       <MainHeader />
       <div className="mt-10">
         <Routes>

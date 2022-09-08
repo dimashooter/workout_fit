@@ -39,7 +39,7 @@ const Dashboard = () => {
   const filteredDashboard = state.dashboard.filter((el) => el.day === activeDay);
   return (
     <div>
-      <div className="flex gap-2 w-full justify-between mb-2" onClick={handleDay}>
+      <div className="flex gap-2 w-full justify-between mb-2 flex-wrap" onClick={handleDay}>
         {buttons.map((btn) => {
           const styles =
             activeMenuItem === btn.id
