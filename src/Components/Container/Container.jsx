@@ -14,7 +14,7 @@ const Container = () => {
     }
   }, []);
   return (
-    <div className="flex gap-2">
+    <div className="flex md:gap-2 sm:gap-0">
       <Navbar />
       <Main />
     </div>

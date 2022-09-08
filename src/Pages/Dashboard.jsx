@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import useClickOutside from '../hooks/useClickOutside';
 import { clearDashboard } from '../redux/dashboardSlice';
 import { camelCase } from '../utils/camelCase';
 
@@ -39,7 +40,9 @@ const Dashboard = () => {
   const filteredDashboard = state.dashboard.filter((el) => el.day === activeDay);
   return (
     <div>
-      <div className="flex gap-2 w-full justify-between mb-2 flex-wrap" onClick={handleDay}>
+      <div
+        className="flex gap-2 w-full md:justify-between sm:justify-start mb-2 flex-wrap"
+        onClick={handleDay}>
         {buttons.map((btn) => {
           const styles =
             activeMenuItem === btn.id
