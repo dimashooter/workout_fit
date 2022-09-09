@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchDashboard } from '../../redux/dashboardSlice';
 import Main from '../main/Main';
 import Navbar from '../Navbar/Navbar';

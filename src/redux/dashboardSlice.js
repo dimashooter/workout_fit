@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   dashboard: [],
-  saveTime: '',
 };
 
 const dashboardSlice = createSlice({
@@ -19,15 +18,25 @@ const dashboardSlice = createSlice({
     },
     fetchDashboard(state, { payload }) {
       let tmp = JSON.parse(payload);
+
       if (tmp.dashboard) {
         tmp.dashboard.map((item) => {
-          return state.dashboard.push({ ...item, date: tmp.currentTime });
+          return state.dashboard.push({ ...item });
         });
+      }
+    },
+    editFilteredDashboard(state, { payload }) {
+      
+      const foundDashboard = state.dashboard.find((el) => payload.id === el.id);
+      if (foundDashboard) {
+        foundDashboard.name = payload.name;
+        foundDashboard.approaches = payload.approaches;
       }
     },
   },
 });
 
-export const { addToDashboard, fetchDashboard, clearDashboard } = dashboardSlice.actions;
+export const { addToDashboard, fetchDashboard, clearDashboard, editFilteredDashboard } =
+  dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
