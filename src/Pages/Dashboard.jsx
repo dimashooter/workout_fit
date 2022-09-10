@@ -1,12 +1,19 @@
 import React from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearDashboard, editFilteredDashboard } from '../redux/dashboardSlice';
+import {
+  clearDashboard,
+  deleteFilteredDashboard,
+  editFilteredDashboard,
+} from '../redux/dashboardSlice';
 import { camelCase } from '../utils/camelCase';
 import { CgGym } from 'react-icons/cg';
 import { MdEdit } from 'react-icons/md';
 import Modal from '../Components/modal';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import DashboardItem from './DashboardItem';
+import { AiOutlineMinusCircle } from 'react-icons/ai';
+import { useEffect } from 'react';
 
 const buttons = [
   { id: 1, name: 'Monday' },
@@ -60,8 +67,8 @@ const Dashboard = () => {
     const approaches = item.approaches.map((el, idx) => {
       return {
         id: el.id,
-        kg: data[`count-${idx}`],
-        count: data[`kg-${idx}`],
+        kg: data[`kg-${idx}`],
+        count: data[`count-${idx}`],
         done: false,
       };
     });
@@ -73,13 +80,20 @@ const Dashboard = () => {
     };
     dispatch(editFilteredDashboard(obj));
     setEditCurrentItem(false);
-    console.log(data);
+  };
+  const handleDeleteCurrentItem = (id) => {
+    if (window.confirm('Are you sure you want to delete ?' === true)) {
+      dispatch(deleteFilteredDashboard(id));
+      saveDashboard();
+    } else {
+      return;
+    }
   };
   return (
     <>
       <div>
         <div
-          className="flex gap-2 w-full md:justify-between sm:justify-start mb-2 flex-wrap"
+          className="flex gap-2 w-full  justify-start mb-2 flex-wrap"
           onClick={handleDay}>
           {buttons.map((btn) => {
             const styles =
@@ -107,14 +121,20 @@ const Dashboard = () => {
         {filteredDashboard.map((item) => {
           return (
             <div key={item.id}>
-              <div className="flex gap-3">
+              <div className="flex gap-3 items-center">
                 <span className="text-2xl font-bold text-[#340075]">{camelCase(item.name)}</span>
                 <MdEdit
-                  color="#340075"
-                  size={30}
+                  className="bg-slate-500 px-3 py-2 rounded-md"
+                  color="#FFFFFF"
+                  size={50}
                   onClick={() => openModal(item)}
                   style={{ cursor: 'pointer' }}
                 />
+                <button
+                  className="bg-[#ffdde1] px-3 py-2 rounded-md"
+                  onClick={() => handleDeleteCurrentItem(item.id)}>
+                  <AiOutlineMinusCircle color="#f69ca5" size={'30px'} />
+                </button>
               </div>
               <div className="">
                 <div className="flex gap-5">
@@ -149,20 +169,16 @@ const Dashboard = () => {
           </h3>
         )}
       </div>
-      {filteredDashboard.length > 0 && (
-        <div className="flex gap-10 mt-3">
-          <button
-            className="px-4 py-2 bg-[#340075] text-white rounded-md"
-            onClick={deleteDashboard}>
-            delete dashboard
-          </button>
-          <button
-            className="px-4 py-2 bg-[#340075] text-white rounded-md active:bg-[#ffffff] active:text-[#340075]"
-            onClick={saveDashboard}>
-            save dashboard
-          </button>
-        </div>
-      )}
+      <div className="flex gap-10 mt-3">
+        <button className="px-4 py-2 bg-[#340075] text-white rounded-md" onClick={deleteDashboard}>
+          delete dashboard
+        </button>
+        <button
+          className="px-4 py-2 bg-[#340075] text-white rounded-md active:bg-[#ffffff] active:text-[#340075]"
+          onClick={saveDashboard}>
+          save dashboard
+        </button>
+      </div>
       <Modal open={editCurrentItem} onClose={() => setEditCurrentItem(false)}>
         <form onSubmit={handleSubmit(formSubmit)} className="flex flex-col gap-5">
           <label htmlFor="">
@@ -174,51 +190,7 @@ const Dashboard = () => {
               {...register('name')}
             />
           </label>
-          {item.approaches?.map((el, idx) => {
-            return (
-              <>
-                <Controller
-                  control={control}
-                  name={`count-${idx}`}
-                  defaultValue={el.count}
-                  render={({ field: { value, onChange } }) => (
-                    <div className="flex gap-5">
-                      <span className="w-[50px]">{value}</span>
-                      <input
-                        name={`count-${idx}`}
-                        type="range"
-                        min={0}
-                        max={200}
-                        defaultValue={el.count}
-                        {...register(`kg`)}
-                        onChange={onChange}
-                        value={value}
-                      />
-                    </div>
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name={`kg-${idx}`}
-                  defaultValue={el.kg}
-                  render={({ field: { value, onChange } }) => (
-                    <div className="flex gap-5">
-                      <span className="w-[50px]">{value}</span>
-                      <input
-                        type="range"
-                        min={0}
-                        max={200}
-                        defaultValue={el.kg}
-                        {...register(`count`)}
-                        onChange={onChange}
-                        value={value}
-                      />
-                    </div>
-                  )}
-                />
-              </>
-            );
-          })}
+          <DashboardItem item={item} control={control} register={register} />
           <input type="submit" value="edit" />
         </form>
       </Modal>
