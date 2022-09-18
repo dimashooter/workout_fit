@@ -1,10 +1,7 @@
 import Container from './Components/Container/Container';
 
 function App() {
-
-  
-
-  return <Container />;
+	return <Container />;
 }
 
 export default App;
